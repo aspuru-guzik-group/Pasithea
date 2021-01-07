@@ -1,0 +1,15 @@
+Summary of dreaming:
+
+Input upperbound=0.9
+Target logP=-6
+Prediction lr=1e-06
+Dreaming lr=0.0001
+Number of molecules trained:10000
+Number of molecules dreamed:500
+avg before dreaming: 0.39087442
+avg after dreaming: -0.34607422000000015
+Percent unchanged: 0.2%
+Percent adjusted toward target: 75.6%
+Percent adjusted away from target: 24.200000000000006%
+Dreaming time: 311584.4683480002
+Training time: 872679.2648230001

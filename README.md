@@ -6,10 +6,10 @@ This repository contains code for Pasithea, a gradient-based method for property
 
 <img align="center" src="./images/concept.pdf"/>
 
-###Usage
+### Usage
 The provided script `demo.py` may be used to view some molecular transformations and logP optimization. The current hyperparameters are set in `settings.yml`. You may also visualize the shifts in logP distribution using the module `distribution_analysis.py`.
 
-###Code structure
+### Code structure
 `settings.yml`: Hyperparameter tuning.
 
 `train.py`: Script for training the neural network on regression.
@@ -30,7 +30,7 @@ The provided script `demo.py` may be used to view some molecular transformations
 
 
 
-###References
+### References
 [1] Shen, Cynthia, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. "Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations." arXiv preprint arXiv:2012.09712 (2020).
 
 [2] Krenn, Mario, Florian Häse, AkshatKumar Nigam, Pascal Friederich, and Alan Aspuru-Guzik. "Self-Referencing Embedded Strings (SELFIES): A 100% robust molecular string representation." Machine Learning: Science and Technology 1, no. 4 (2020): 045024.

@@ -2,9 +2,17 @@
 
 This repository contains code for Pasithea, a gradient-based method for property optimization on molecules. At the core of model is a simple fully-connected neural network. Integral to the model are the following additional components:
 * SELFIES, a 100% valid representation of molecular graphs
-* We also add random noise to molecular inputs.
+* We also add random noise to molecular inputs. Every zero in the one-hot encoding is replaced with a random decimal in the range [0, k], where k is a specified upperbound.
+
+<img align="center" src="./images/noise.pdf"/>
+
+At a high-level, there are two main steps:
+1. Train the neural network on one-hot encoded SELFIES inputs and continuous logP outputs.
+2. Inverse-train the neural network. Given a single logP and a single molecule, the network generates molecular variants that are optimized toward the logP value. The weights and biases remain fixed.
 
 <img align="center" src="./images/concept.pdf"/>
+
+
 
 ### Usage
 The provided script `demo.py` may be used to view some molecular transformations and logP optimization. The current hyperparameters are set in `settings.yml`. You may also visualize the shifts in logP distribution using the module `distribution_analysis.py`.

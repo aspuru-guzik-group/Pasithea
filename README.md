@@ -4,7 +4,7 @@ This repository contains code for Pasithea, a gradient-based method for property
 * SELFIES, a 100% valid representation of molecular graphs
 * We also add random noise to molecular inputs. Every zero in the one-hot encoding is replaced with a random decimal in the range [0, k], where k is a specified upperbound.
 
-<img align="center" src="./images/noise.pdf"/>
+<img align="center" src="./images/noise.png"/>
 
 At a high-level, there are two main steps:
 1. Train the neural network on one-hot encoded SELFIES inputs and continuous logP outputs.

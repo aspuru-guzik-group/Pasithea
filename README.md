@@ -10,7 +10,7 @@ At a high-level, there are two main steps:
 1. Train the neural network on one-hot encoded SELFIES inputs and continuous logP outputs.
 2. Inverse-train the neural network. Given a single logP and a single molecule, the network generates molecular variants that are optimized toward the logP value. The weights and biases remain fixed.
 
-<img src="images/concept.pdf"/>
+<img align="center" src="./images/concept.png"/>
 
 
 

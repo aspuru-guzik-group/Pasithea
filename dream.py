@@ -11,8 +11,8 @@ from torch import nn
 from mol_utils import edit_hot, lst_of_logP, multiple_hot_to_indices
 
 
-def dream_model(model, prop, largest_molecule_len, alphabet, upperbound, 
-                data_train, lr_enc, batch_size, num_epochs):
+def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
+                data_train, lr, batch_size, num_epochs):
     """
     Trains in the inverse of the model with a single molecular input.
     Returns initial, final, and intermediate molecules/property values
@@ -21,34 +21,34 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
     the list of loss terms during dreaming;
     and the list of epochs at which the molecule transformed during dreaming.
     """
-    
+
     loss_prediction=[]
-    
+
     # reshape for efficient parallelization
-    data_train = data_train.reshape(data_train.shape[0], 
+    data_train = data_train.reshape(data_train.shape[0],
                                     data_train.shape[1] * data_train.shape[2])
-    
+
      # add random noise to one-hot encoding
     data_train_edit = edit_hot(data_train, upper_bound=upperbound)
     data_train_var=torch.autograd.Variable(data_train_edit, requires_grad=True)
     data_train_prop=torch.tensor([prop], dtype=torch.float)
-    
+
     #initiailize list of intermediate property values and molecules
     interm_prop = []
     interm_mols = []
-    
+
     epoch_transformed = []
     steps = 0
     valid_steps = 0
-    
+
     # initialize an instance of the model
-    optimizer_encoder = torch.optim.Adam([data_train_var], lr=lr_enc)
-    
+    optimizer_encoder = torch.optim.Adam([data_train_var], lr=lr)
+
     for epoch in range(num_epochs):
-        
+
         # feedforward step
         calc_properties = model(data_train_var)
-        
+
         # mean squared error between target and calculated property
         calc_properties = calc_properties.reshape(batch_size)
         criterion = nn.MSELoss()
@@ -62,28 +62,28 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
 
         real_loss=loss.detach().numpy()
         loss_prediction.append(real_loss)
-        
+
 
         if epoch%100==0:
             print('epoch: ',epoch,', loss: ', real_loss)
 
         # convert one-hot encoding to SMILES molecule
         molecule_reshaped=torch.reshape(data_train_var,
-                                        (1, largest_molecule_len, 
+                                        (1, largest_molecule_len,
                                          len(alphabet)))
         gathered_indices = multiple_hot_to_indices(molecule_reshaped)
         prop_of_mol, smiles_of_mol=lst_of_logP(gathered_indices, alphabet)
-        
+
         if len(interm_prop)==0 or interm_prop[len(interm_prop)-1] != prop_of_mol[0]:
-            
+
             # collect intermediate molecules
             interm_mols.append(smiles_of_mol[0])
             interm_prop.append(prop_of_mol[0])
             steps+=1
             epoch_transformed.append(epoch)
-            
+
             if len(interm_prop)>1:
-                
+
                 # determine validity of transformation
                 previous_prop = interm_prop[len(interm_prop)-2]
                 current_prop = prop_of_mol[0]
@@ -108,30 +108,30 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
     prop_of_mol, smiles_of_mol=lst_of_logP(gathered_indices, alphabet)
     interm_mols.append(smiles_of_mol[0])
     interm_prop.append(prop_of_mol[0])
-    
+
     percent_valid_transform = None
     if steps > 0:
         percent_valid_transform = valid_steps / steps *100
-        
+
     return interm_prop, interm_mols, percent_valid_transform, loss_prediction, epoch_transformed
 
 
-    
 
-        
-def dream(directory, args, largest_molecule_len, alphabet, model, train_time, 
-          upperbound, data_dream, prop_dream, prop, 
+
+
+def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
+          upperbound, data_dream, prop_dream, prop,
           lr_train, lr_dream, num_train, num_dream, dreaming_parameters):
     """Dreaming procedure for a dataset of molecules. Saves the following
     results to file:
         - Summary of dreaming
-        - All molecular transformations, mapping from initial to final 
+        - All molecular transformations, mapping from initial to final
             molecule and property
         - Intermediate molecules for each transformation"""
-    
+
     data_dream=torch.tensor(data_dream, dtype=torch.float, device=args.device)
     prop_dream = torch.tensor(prop_dream, dtype=torch.float, device=args.device)
-    
+
     # plot initial distribution of property value in the dataset
     plot_utils.initial_histogram(prop_dream.numpy(), directory)
     avg1 = torch.mean(prop_dream).numpy()
@@ -145,31 +145,31 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
     t= time.clock()
     for i in range(num_dream):
         print('Molecule #'+str(i))
-        
+
         # convert one-hot encoding to SMILES molecule
         mol = data_dream[i].clone()
         gathered_mols=[]
         _,max_index=mol.max(1)
         gathered_mols.append(max_index.data.cpu().numpy().tolist())
         prop_of_mol,smiles_of_mol=mol_utils.lst_of_logP(gathered_mols, alphabet)
-        
+
         mol1 = smiles_of_mol[0]
         mol1_prop = prop_of_mol[0]
         train_mol = torch.reshape(mol, (1, mol.shape[0], mol.shape[1]))
-        
+
         # feed molecule into the inverse-model
-        (track_prop, track_mol, 
-        percent_valid_interm, 
-        track_loss, 
-        epoch_transformed) = dream_model(model = model, 
+        (track_prop, track_mol,
+        percent_valid_interm,
+        track_loss,
+        epoch_transformed) = dream_model(model = model,
                                          prop=prop,
                                          largest_molecule_len=largest_molecule_len,
                                          alphabet=alphabet,
                                          upperbound = upperbound,
-                                         data_train=train_mol, 
-                                         lr_enc=lr_dream, 
+                                         data_train=train_mol,
+                                         lr=lr_dream,
                                          **dreaming_parameters)
-        
+
         # track and record results from dreaming
         prop_val = track_prop[len(track_prop)-1]
         mol2 = track_mol[len(track_mol)-1]
@@ -193,9 +193,9 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
         transforms.append(transform)
         interm_tuple = ([mol1_prop]+track_prop, [mol1]+track_mol)
         interm.append(interm_tuple)
-    
+
     dream_time = time.clock()-t
-    
+
     # plot final distribution of property value after transformation
     plot_utils.dreamed_histogram(prop_lst, prop, directory)
 
@@ -237,4 +237,3 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
         h1.write(str(interm[i][0])+'\n')
         h1.write(str(interm[i][1])+'\n')
     h1.close()
-    

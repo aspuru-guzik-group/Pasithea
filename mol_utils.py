@@ -12,7 +12,10 @@ import torch
 from rdkit.Chem import rdMolDescriptors
 from rdkit.Chem import MolFromSmiles
 from rdkit.Chem import Descriptors
+from rdkit.Chem import Draw
 from torch import rand
+from utils import make_dir
+
 
 def edit_hot(hot, upper_bound):
     """Replaces all zeroes with a random float in the range [0,upper_bound]"""
@@ -20,6 +23,7 @@ def edit_hot(hot, upper_bound):
     newhot=hot+upper_bound*rand(hot.shape)
     newhot[newhot>1]=1
     return newhot
+
 
 def logP_from_molecule(smiles_list):
     """Calculate list of logP from list of SMILES molecules"""
@@ -35,6 +39,7 @@ def logP_from_molecule(smiles_list):
         else:
             logP_vals.append(Descriptors.MolLogP(res_molecule))
     return logP_vals
+
 
 def lst_of_logP(hot, encoding_alphabet):
     """Calculate list of logP from list of one-hot encodings"""
@@ -53,6 +58,7 @@ def lst_of_logP(hot, encoding_alphabet):
         else:
             logP_lst.append(Descriptors.MolLogP(res_molecule))
     return logP_lst, smiles_mol_lst
+
 
 def smile_to_hot(smile, largest_smile_len, alphabet):
     """
@@ -73,12 +79,12 @@ def smile_to_hot(smile, largest_smile_len, alphabet):
         letter[value] = 1
         onehot_encoded.append(letter)
     return integer_encoded, np.array(onehot_encoded)
-    
+
 
 def multiple_smile_to_hot(smiles_list, largest_molecule_len, alphabet):
     """
     Convert a list of smile strings to a one-hot encoding
-    
+
     Returned shape (num_smiles x len_of_largest_smile x len_smile_encoding)
     """
     hot_list = []
@@ -86,6 +92,7 @@ def multiple_smile_to_hot(smiles_list, largest_molecule_len, alphabet):
         _, onehot_encoded = smile_to_hot(smile, largest_molecule_len, alphabet)
         hot_list.append(onehot_encoded)
     return np.array(hot_list)
+
 
 def selfies_to_hot(selfie, largest_selfie_len, alphabet):
     """
@@ -109,13 +116,14 @@ def selfies_to_hot(selfie, largest_selfie_len, alphabet):
 
     return integer_encoded, np.array(onehot_encoded)
 
+
 def logp(molecule):
     """
     Calculate the logP of the selfies string
     """
     m = MolFromSmiles(sf.decoder(molecule))
     return rdMolDescriptors.CalcCrippenDescriptors(m)[0]
-    
+
 
 def multiple_selfies_to_hot(selfies_list, largest_molecule_len, alphabet):
     """Convert a list of selfies strings to a one-hot encoding
@@ -127,13 +135,15 @@ def multiple_selfies_to_hot(selfies_list, largest_molecule_len, alphabet):
         hot_list.append(onehot_encoded)
     return np.array(hot_list)
 
+
 def hot_to_indices(hot):
     """Convert an element of one-hot encoding to indices
     """
     hot = torch.tensor(hot)
     _,max_index=hot.max(1)
     return max_index.data.cpu().numpy().tolist()
-    
+
+
 def multiple_hot_to_indices(hots):
     """Convert one-hot encoding to list of indices
     """
@@ -141,17 +151,18 @@ def multiple_hot_to_indices(hots):
     for hot in hots:
         gathered_ints.append(hot_to_indices(hot))
     return gathered_ints
-    
-    
+
+
 def indices_to_selfies(hot, alphabet):
     """Convert list of indices to selfies string
     """
     int_to_symbol = dict((i, c) for i, c in enumerate(alphabet))
-    
+
     selfie = ''
     for num in hot:
         selfie += int_to_symbol[num]
     return selfie
+
 
 def multiple_indices_to_selfies(hots, alphabet):
     """Convert multiple lists of indices to selfies string
@@ -160,3 +171,14 @@ def multiple_indices_to_selfies(hots, alphabet):
     for hot in hots:
         selfies_list.append(indices_to_selfies(hot, alphabet))
     return np.array(selfies_list)
+
+
+def draw_mol_to_file(mol_lst, directory):
+    """Saves the pictorial representation of each molecule in the list to
+    file."""
+
+    directory = 'dream_results/mol_pics'
+    make_dir(directory)
+    for smiles in mol_lst:
+        mol = MolFromSmiles(smiles)
+        Draw.MolToFile(mol,directory+'/'+smiles+'.pdf')

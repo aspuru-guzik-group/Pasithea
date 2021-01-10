@@ -12,7 +12,7 @@ from mol_utils import edit_hot, lst_of_logP, multiple_hot_to_indices
 
 
 def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
-                data_train, lr, batch_size, num_epochs):
+                data_train, lr, batch_size, num_epochs, display=True):
     """
     Trains in the inverse of the model with a single molecular input.
     Returns initial, final, and intermediate molecules/property values
@@ -28,7 +28,7 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
     data_train = data_train.reshape(data_train.shape[0],
                                     data_train.shape[1] * data_train.shape[2])
 
-     # add random noise to one-hot encoding
+    # add random noise to one-hot encoding
     data_train_edit = edit_hot(data_train, upper_bound=upperbound)
     data_train_var=torch.autograd.Variable(data_train_edit, requires_grad=True)
     data_train_prop=torch.tensor([prop], dtype=torch.float)
@@ -65,7 +65,8 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
 
 
         if epoch%100==0:
-            print('epoch: ',epoch,', loss: ', real_loss)
+            if display:
+                print('epoch: ',epoch,', loss: ', real_loss)
 
         # convert one-hot encoding to SMILES molecule
         molecule_reshaped=torch.reshape(data_train_var,
@@ -88,17 +89,19 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
                 previous_prop = interm_prop[len(interm_prop)-2]
                 current_prop = prop_of_mol[0]
                 valid = (prop > previous_prop and current_prop > previous_prop) \
-                    or (prop < previous_prop and current_prop < previous_prop)
+                        or (prop < previous_prop and current_prop < previous_prop)
                 if valid:
                     valid_steps += 1
 
         if real_loss<1e-3:
-            print('Small loss, stop dreaming at epoch ', epoch)
+            if display:
+                print('Small loss, stop dreaming at epoch ', epoch)
             break
 
         if len(loss_prediction)>1000:
             if 0.99*loss_prediction[-900]<loss_prediction[-1]:
-                print('Too small decrease, stop dreaming at epoch ', epoch)
+                if display:
+                    print('Too small decrease, stop dreaming at epoch ', epoch)
                 break
 
     # convert one-hot encoding to SMILES molecule
@@ -114,8 +117,6 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
         percent_valid_transform = valid_steps / steps *100
 
     return interm_prop, interm_mols, percent_valid_transform, loss_prediction, epoch_transformed
-
-
 
 
 
@@ -159,22 +160,22 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
 
         # feed molecule into the inverse-model
         (track_prop, track_mol,
-        percent_valid_interm,
-        track_loss,
-        epoch_transformed) = dream_model(model = model,
-                                         prop=prop,
-                                         largest_molecule_len=largest_molecule_len,
-                                         alphabet=alphabet,
-                                         upperbound = upperbound,
-                                         data_train=train_mol,
-                                         lr=lr_dream,
-                                         **dreaming_parameters)
+         percent_valid_interm,
+         track_loss,
+         epoch_transformed) = dream_model(model = model,
+                                          prop=prop,
+                                          largest_molecule_len=largest_molecule_len,
+                                          alphabet=alphabet,
+                                          upperbound = upperbound,
+                                          data_train=train_mol,
+                                          lr=lr_dream,
+                                          **dreaming_parameters)
 
         # track and record results from dreaming
         prop_val = track_prop[len(track_prop)-1]
         mol2 = track_mol[len(track_mol)-1]
         valid = (prop > mol1_prop and prop_val > mol1_prop) or \
-            (prop < mol1_prop and prop_val < mol1_prop)
+                (prop < mol1_prop and prop_val < mol1_prop)
         if valid:
             num_valid += 1
         if mol1_prop == prop_val or mol1==mol2:
@@ -184,7 +185,7 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
         percent_invalid = 100 - percent_valid -percent_unchanged
         transform = mol1+' --> '+mol2+', '+str(mol1_prop)+' --> '+str(prop_val)
         print('Transformation: ' +transform)
-        print('Percent transformed in the direction of logP= '+\
+        print('Percent transformed in the direction of logP= '+ \
               str(prop)+': '+str(percent_valid)+'%')
         print('Percent transformed incorrectly: ' +str(percent_invalid)+'%')
         print('Percent not transformed: '+str(percent_unchanged)+'%')
@@ -237,3 +238,37 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
         h1.write(str(interm[i][0])+'\n')
         h1.write(str(interm[i][1])+'\n')
     h1.close()
+
+
+def mol_transform(mols, model, prop, largest_molecule_len, alphabet,
+                  upperbound_dr, lr_dream, dreaming_parameters, plot=False):
+    """Dreaming procedure for a set of molecules. Plots and saves to file
+    the logP and loss evolution over number of epochs if desired."""
+
+    for i, mol in enumerate(mols):
+        mol = torch.reshape(mol, (1, mol.shape[0], mol.shape[1]))
+        (track_prop, track_mol,
+         percent_valid_interm,
+         track_loss,
+         epoch_transformed) = dream_model(model = model,
+                                          prop=prop,
+                                          largest_molecule_len=largest_molecule_len,
+                                          alphabet=alphabet,
+                                          upperbound = upperbound_dr,
+                                          data_train=mol,
+                                          lr=lr_dream,
+                                          **dreaming_parameters,
+                                          display=False)
+
+
+        mol1_prop = track_prop[0]
+        mol2_prop = track_prop[len(track_prop)-1]
+        mol1 = track_mol[0]
+        mol2 = track_mol[len(track_mol)-1]
+        transform = mol1+' --> '+mol2+', '+str(mol1_prop)+' --> '+str(mol2_prop)
+        print('Transformation '+ str(i+1)+': '+transform)
+        print(track_mol)
+
+        if plot:
+            plot_utils.plot_transform(prop, track_prop, track_mol,
+                                      epoch_transformed, track_loss)

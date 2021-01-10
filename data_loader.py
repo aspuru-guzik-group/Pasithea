@@ -156,7 +156,7 @@ def read_smiles(filename):
 
 def preprocess(num_mol, file_name):
     """Takes a random subset of num_mol SMILES from a given dataset;
-    converts each SMILES to the SELFIES equivalent;
+    converts each SMILES to the SELFIES equivalent and one-hot encoding;
     encodes other string information."""
 
     smiles_list = read_smiles(file_name)

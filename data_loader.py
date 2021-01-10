@@ -1,5 +1,5 @@
 """
-Methods for reading a dataset of SMILES molecular strings.
+Methods for reading and preprocessing dataset of SMILES molecular strings.
 """
 
 import selfies as sf

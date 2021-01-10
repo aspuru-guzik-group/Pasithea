@@ -8,7 +8,6 @@ import pandas as pd
 import os
 import utils
 import mol_utils
-import yaml
 
 
 def get_largest_selfie_len(smiles_list):
@@ -155,10 +154,10 @@ def read_smiles(filename):
     return smiles_list
 
 
-def preprocess(num_mol):
-    print('Start reading data file...')
-    settings = yaml.load(open("settings.yml", "r"))
-    file_name = settings['data_preprocess']['smiles_file']
+def preprocess(num_mol, file_name):
+    """Takes a random subset of num_mol SMILES from a given dataset;
+    converts each SMILES to the SELFIES equivalent;
+    encodes other string information."""
 
     smiles_list = read_smiles(file_name)
     selfies_alphabet, largest_selfies_len, smiles_alphabet, largest_smiles_len \

@@ -17,7 +17,9 @@ from dream import dream
 
 def main():
     # import hyperparameter and training settings from yaml
+    print('Start reading data file...')
     settings = yaml.load(open("settings.yml", "r"))
+    file_name = settings['data_preprocess']['smiles_file']
     lr_trains = settings['lr_train']
     lr_trains = [float(num) for num in lr_trains]
     lr_dreams = settings['lr_dream']
@@ -54,7 +56,7 @@ def main():
 
     # data-preprocessing
     data, prop_vals, alphabet, len_max_molec1Hot, largest_molecule_len = \
-        data_loader.preprocess(num_mol)
+        data_loader.preprocess(num_mol, file_name)
 
     # add stochasticity to data
     x = [i for i in range(len(data))]  # random shuffle input

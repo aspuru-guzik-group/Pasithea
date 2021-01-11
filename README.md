@@ -34,11 +34,11 @@ The provided script `demo.py` may be used to view some molecular transformations
 
 Below are modules you can run to generate molecules and visualize the results:
 
-* `demo.py`: Experiment with the model on input molecular data. You may tweak the settings in `settings.yml`.
+* `demo.py`: Experiment with the model on the QM9 dataset. You may tweak some settings in `settings.yml`.
 
 * `distribution_analysis.py`: Visualize distribution shifts from a set of molecular transformations.
 
-* `test_mols.py`: Test and visualize individual molecular transformations. You may tweak the settings in `test_mol_settings.yml`.
+* `test_mols.py`: Test and visualize individual molecular transformations. You may tweak some settings in `test_mol_settings.yml`, including test molecules of your choosing.
 
 ### References
 [1] Shen, Cynthia, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. "Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations." arXiv preprint arXiv:2012.09712 (2020).

@@ -24,11 +24,7 @@ The provided script `demo.py` may be used to view some molecular transformations
 
 `dream.py`: Script for inverse-training and generating optimized molecules.
 
-`demo.py`: Experiment with the model on input molecular data.
-
 `model.py`: Implementation of neural network.
-
-`distribution_analysis.py`: Analyze distribution shifts from molecular transformation results.
 
 `data_loader.py`: Methods for data preprocessing.
 
@@ -36,7 +32,16 @@ The provided script `demo.py` may be used to view some molecular transformations
 
 `{mol/plot}_utils.py`: Util modules for adding noise to inputs, converting between molecular representations, and visualization. 
 
+Below are modules you can run to generate molecules and visualize the results:
 
+`demo.py`: Experiment with the model on input molecular data. You may tweak the settings in `settings.yml`.
+
+`distribution_analysis.py`: Visualize distribution shifts from a set of molecular transformations.
+
+`test_mols.py`: Test and visualize individual molecular transformations. You may tweak the settings in `test_mol_settings.yml`.
+
+### Comments
+All comments and feedback are welcome!
 
 ### References
 [1] Shen, Cynthia, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. "Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations." arXiv preprint arXiv:2012.09712 (2020).

@@ -40,9 +40,6 @@ Below are modules you can run to generate molecules and visualize the results:
 
 * `test_mols.py`: Test and visualize individual molecular transformations. You may tweak the settings in `test_mol_settings.yml`.
 
-### Comments
-All comments and feedback are welcome!
-
 ### References
 [1] Shen, Cynthia, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. "Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations." arXiv preprint arXiv:2012.09712 (2020).
 

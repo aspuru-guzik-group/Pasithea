@@ -15,11 +15,9 @@ At a high-level, there are two main steps:
 
 
 ### Usage
-The provided script `demo.py` may be used to view some molecular transformations and logP optimization. The current hyperparameters are set in `settings.yml`. You may also visualize the shifts in logP distribution using the module `distribution_analysis.py`.
+The provided script `demo.py` may be used to view some molecular transformations and logP optimization. You may also visualize the shifts in logP distribution using the module `distribution_analysis.py` and visualize individual transformations using `test_mols.py`.
 
 ### Code structure
-* `settings.yml`: Hyperparameter tuning.
-
 * `train.py`: Script for training the neural network on regression.
 
 * `dream.py`: Script for inverse-training and generating optimized molecules.
@@ -31,8 +29,6 @@ The provided script `demo.py` may be used to view some molecular transformations
 * `utils.py`: General purpose utils.
 
 * `{mol/plot}_utils.py`: Util modules for adding noise to inputs, converting between molecular representations, and visualization. 
-
-Below are modules you can run to generate molecules and visualize the results:
 
 * `demo.py`: Experiment with the model on the QM9 dataset. You may tweak some settings in `settings.yml`.
 

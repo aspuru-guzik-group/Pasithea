@@ -18,27 +18,27 @@ At a high-level, there are two main steps:
 The provided script `demo.py` may be used to view some molecular transformations and logP optimization. The current hyperparameters are set in `settings.yml`. You may also visualize the shifts in logP distribution using the module `distribution_analysis.py`.
 
 ### Code structure
-`settings.yml`: Hyperparameter tuning.
+* `settings.yml`: Hyperparameter tuning.
 
-`train.py`: Script for training the neural network on regression.
+* `train.py`: Script for training the neural network on regression.
 
-`dream.py`: Script for inverse-training and generating optimized molecules.
+* `dream.py`: Script for inverse-training and generating optimized molecules.
 
-`model.py`: Implementation of neural network.
+* `model.py`: Implementation of neural network.
 
-`data_loader.py`: Methods for data preprocessing.
+* `data_loader.py`: Methods for data preprocessing.
 
-`utils.py`: General purpose utils.
+* `utils.py`: General purpose utils.
 
-`{mol/plot}_utils.py`: Util modules for adding noise to inputs, converting between molecular representations, and visualization. 
+* `{mol/plot}_utils.py`: Util modules for adding noise to inputs, converting between molecular representations, and visualization. 
 
 Below are modules you can run to generate molecules and visualize the results:
 
-`demo.py`: Experiment with the model on input molecular data. You may tweak the settings in `settings.yml`.
+* `demo.py`: Experiment with the model on input molecular data. You may tweak the settings in `settings.yml`.
 
-`distribution_analysis.py`: Visualize distribution shifts from a set of molecular transformations.
+* `distribution_analysis.py`: Visualize distribution shifts from a set of molecular transformations.
 
-`test_mols.py`: Test and visualize individual molecular transformations. You may tweak the settings in `test_mol_settings.yml`.
+* `test_mols.py`: Test and visualize individual molecular transformations. You may tweak the settings in `test_mol_settings.yml`.
 
 ### Comments
 All comments and feedback are welcome!

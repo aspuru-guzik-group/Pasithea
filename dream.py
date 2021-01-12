@@ -44,7 +44,7 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
     interm_prop = [prop_of_mol[0]]
     interm_mols = [smiles_of_mol[0]]
 
-    epoch_transformed = []
+    epoch_transformed = [0]
     steps = 0
     valid_steps = 0
 
@@ -88,7 +88,7 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
             interm_mols.append(smiles_of_mol[0])
             interm_prop.append(prop_of_mol[0])
             steps+=1
-            epoch_transformed.append(epoch)
+            epoch_transformed.append(epoch+1)
 
             if len(interm_prop)>1:
 

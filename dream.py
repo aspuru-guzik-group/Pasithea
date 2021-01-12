@@ -270,5 +270,5 @@ def mol_transform(mols, model, prop, largest_molecule_len, alphabet,
         print(track_mol)
 
         if plot:
-            plot_utils.plot_transform(prop, track_prop, track_mol,
+            plot_utils.plot_transform(prop, track_mol, track_prop,
                                       epoch_transformed, track_loss)

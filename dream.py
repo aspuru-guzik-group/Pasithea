@@ -33,9 +33,16 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
     data_train_var=torch.autograd.Variable(data_train_edit, requires_grad=True)
     data_train_prop=torch.tensor([prop], dtype=torch.float)
 
+    # convert one-hot encoding to SMILES molecule
+    molecule_reshaped=torch.reshape(data_train_var,
+                                    (1, largest_molecule_len,
+                                     len(alphabet)))
+    gathered_indices = multiple_hot_to_indices(molecule_reshaped)
+    prop_of_mol, smiles_of_mol=lst_of_logP(gathered_indices, alphabet)
+
     #initiailize list of intermediate property values and molecules
-    interm_prop = []
-    interm_mols = []
+    interm_prop = [prop_of_mol[0]]
+    interm_mols = [smiles_of_mol[0]]
 
     epoch_transformed = []
     steps = 0

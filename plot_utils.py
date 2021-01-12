@@ -126,6 +126,6 @@ def plot_transform(target, mol, logP, epoch, loss):
     fig.tight_layout()  # otherwise the right y-label is slightly clipped
     plt.title('Target logP = '+str(target))
     plt.tight_layout()
-    plt.savefig('dream_results/{}_{}_transforms.svg'.format(target, loss[len(loss)-1]))
+    #plt.savefig('dream_results/{}_{}_transforms.svg'.format(target, loss[len(loss)-1]))
 
     plt.show()

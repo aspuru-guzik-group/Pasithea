@@ -15,28 +15,26 @@ At a high-level, there are two main steps:
 
 
 ### Usage
-The provided script `demo.py` may be used to view some molecular transformations and logP optimization. The current hyperparameters are set in `settings.yml`. You may also visualize the shifts in logP distribution using the module `distribution_analysis.py`.
+The provided script `demo.py` may be used to view some molecular transformations and logP optimization. You may also visualize the shifts in logP distribution using the module `distribution_analysis.py` and visualize individual transformations using `test_mols.py`.
 
 ### Code structure
-`settings.yml`: Hyperparameter tuning.
+* `train.py`: Script for training the neural network on regression.
 
-`train.py`: Script for training the neural network on regression.
+* `dream.py`: Script for inverse-training and generating optimized molecules.
 
-`dream.py`: Script for inverse-training and generating optimized molecules.
+* `model.py`: Implementation of neural network.
 
-`demo.py`: Experiment with the model on input molecular data.
+* `data_loader.py`: Methods for data preprocessing.
 
-`model.py`: Implementation of neural network.
+* `utils.py`: General purpose utils.
 
-`distribution_analysis.py`: Analyze distribution shifts from molecular transformation results.
+* `{mol/plot}_utils.py`: Util modules for adding noise to inputs, converting between molecular representations, and visualization. 
 
-`data_loader.py`: Methods for data preprocessing.
+* `demo.py`: Experiment with the model on the QM9 dataset. You may tweak some settings in `settings.yml`.
 
-`utils.py`: General purpose utils.
+* `distribution_analysis.py`: Visualize distribution shifts from a set of molecular transformations.
 
-`{mol/plot}_utils.py`: Util modules for adding noise to inputs, converting between molecular representations, and visualization. 
-
-
+* `test_mols.py`: Test and visualize individual molecular transformations. You may tweak some settings in `test_mol_settings.yml`, including test molecules of your choosing.
 
 ### References
 [1] Shen, Cynthia, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. "Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations." arXiv preprint arXiv:2012.09712 (2020).

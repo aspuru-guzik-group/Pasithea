@@ -104,14 +104,6 @@ def dream_model(model, prop, largest_molecule_len, alphabet, upperbound,
                     print('Too small decrease, stop dreaming at epoch ', epoch)
                 break
 
-    # convert one-hot encoding to SMILES molecule
-    molecule_reshaped=torch.reshape(data_train_var,
-                                    (1, largest_molecule_len, len(alphabet)))
-    gathered_indices = multiple_hot_to_indices(molecule_reshaped)
-    prop_of_mol, smiles_of_mol=lst_of_logP(gathered_indices, alphabet)
-    interm_mols.append(smiles_of_mol[0])
-    interm_prop.append(prop_of_mol[0])
-
     percent_valid_transform = None
     if steps > 0:
         percent_valid_transform = valid_steps / steps *100

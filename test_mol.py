@@ -184,7 +184,7 @@ def train(directory, args, model_parameters, len_max_molec1Hot, upperbound,
     name = change_str(directory)+'/model.pt'
 
     if os.path.exists(name):
-        model = load_model(name, len_max_molec1Hot, model_parameters)
+        model = load_model(name, args, len_max_molec1Hot, model_parameters)
         print('Testing model...')
         test_model(directory, args, model,
                    data_train, prop_vals_train, upperbound)

@@ -16,6 +16,7 @@ At a high-level, there are two main steps:
 The provided script `demo.py` may be used to view some molecular transformations and logP optimization from a subset of the QM9 dataset. `settings.yml` contains hyperparameters and other settings you may tweak, such as the learning rate and target logP. Note that the model is saved each time and if a model has already been trained with those hyperparameters, `demo.py` will load the existing model.
 You may also test individual molecules by specifying them in `settings.yml` and running `test_mols.py`.
 
+All questions and comments are welcome.
 
 ### References
 [1] Shen, Cynthia, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. "Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations." arXiv preprint arXiv:2012.09712 (2020).

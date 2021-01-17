@@ -6,8 +6,8 @@ import selfies as sf
 import numpy as np
 import pandas as pd
 import os
-import utils
-import mol_utils
+from utilities import utils
+from utilities import mol_utils
 
 
 def get_largest_selfie_len(smiles_list):

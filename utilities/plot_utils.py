@@ -2,7 +2,7 @@
 Utilities for visualizing training and dreaming results.
 """
 import matplotlib.pyplot as plt
-from utils import closefig
+from utilities.utils import closefig
 
 
 def running_avg_test_loss(avg_test_loss, directory):

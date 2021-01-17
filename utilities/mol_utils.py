@@ -14,7 +14,7 @@ from rdkit.Chem import MolFromSmiles
 from rdkit.Chem import Descriptors
 from rdkit.Chem import Draw
 from torch import rand
-from utils import make_dir
+from utilities.utils import make_dir
 
 
 def edit_hot(hot, upper_bound):

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Example script demonstrating molecular transformations, using logP as target.
 The entire cycle - training and dreaming - is involved.
@@ -369,7 +370,7 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
     prop_lst = []
     interm = []
     transforms = []
-    t= time.clock()
+    t= time.process_time()
     for i in range(num_dream):
         print('Molecule #'+str(i))
 
@@ -421,7 +422,7 @@ def dream(directory, args, largest_molecule_len, alphabet, model, train_time,
         interm_tuple = ([mol1_prop]+track_prop, [mol1]+track_mol)
         interm.append(interm_tuple)
 
-    dream_time = time.clock()-t
+    dream_time = time.process_time()-t
 
     # plot final distribution of property value after transformation
     plot_utils.dreamed_histogram(prop_lst, prop, directory)
@@ -527,11 +528,11 @@ if __name__ == '__main__':
     data_train, data_test, prop_vals_train, prop_vals_test \
         = data_loader.split_train_test(data, prop_vals, num_train, 0.85)
 
-    t=time.clock()
+    t=time.process_time()
     model = train(directory, args, model_parameters, len_max_molec1Hot,
                   upperbound_tr, data_train, prop_vals_train, data_test,
                   prop_vals_test, lr_train, num_epochs, batch_size)
-    train_time = time.clock()-t
+    train_time = time.process_time()-t
 
     directory += change_str('/{}_{}'.format(upperbound_dr,
                                             dreaming_parameters_str))

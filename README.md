@@ -1,7 +1,7 @@
 # Pasithea
 
 This repository contains code for Pasithea, a gradient-based method for property optimization on molecules (or, if you will, a way to dream up molecules). At the core of model is a simple fully-connected neural network. The method outputs continuous, valid molecular transformations, which is enabled by these additions:
-* Self-referencing embedded strings (SELFIES), a surjective representation for molecular graphs.
+* [Self-referencing embedded strings (SELFIES)](https://github.com/aspuru-guzik-group/selfies), a surjective representation for molecular graphs.
 * Random noise in molecular inputs. Every zero in the one-hot encoding is replaced with a random decimal in the range [0, k], where k is a specified upperbound.
 
 <img align="center" src="./images/noise.png"/>

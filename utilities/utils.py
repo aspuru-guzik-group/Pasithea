@@ -41,6 +41,7 @@ def use_gpu():
     parser = argparse.ArgumentParser(description='Set device')
     parser.add_argument('--disable-cuda', action='store_true',
                         help='Disable CUDA')
+
     args = parser.parse_args()
     args.device = None
 

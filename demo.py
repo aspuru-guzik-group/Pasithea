@@ -12,15 +12,15 @@ import torch
 import time
 import numpy as np
 
-from utilities import data_loader
-from utilities import plot_utils
-from utilities import mol_utils
+from pasithea.utilities import data_loader
+from pasithea.utilities import plot_utils
+from pasithea.utilities import mol_utils
 
 from random import shuffle
 from torch import nn
 
-from utilities.utils import change_str, make_dir, use_gpu
-from utilities.mol_utils import edit_hot, lst_of_logP, multiple_hot_to_indices
+from pasithea.utilities.utils import change_str, make_dir, use_gpu
+from pasithea.utilities.mol_utils import edit_hot, lst_of_logP, multiple_hot_to_indices
 
 
 class fc_model(nn.Module):

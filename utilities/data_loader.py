@@ -6,8 +6,8 @@ import selfies as sf
 import numpy as np
 import pandas as pd
 import os
-from utilities import utils
-from utilities import mol_utils
+from pasithea.utilities import utils
+from pasithea.utilities import mol_utils
 
 
 def get_largest_selfie_len(smiles_list):

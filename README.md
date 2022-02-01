@@ -21,6 +21,6 @@ You may also test individual molecules by specifying them in `settings.yml` and 
 All questions and comments are welcome.
 
 ### References
-[1] Cynthia Shen, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. [Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations](https://arxiv.org/abs/2012.09712), arXiv:2012.09712 (2020).
+[1] Cynthia Shen, Mario Krenn, Sagi Eppel, and Alan Aspuru-Guzik. [Deep Molecular Dreaming: Inverse machine learning for de-novo molecular design and interpretability with surjective representations](https://arxiv.org/abs/2012.09712), *Machine Learning: Science and Technology* **2**, 03LT02 (2021).
 
-[2] Mario Krenn, Florian Häse, AkshatKumar Nigam, Pascal Friederich, and Alan Aspuru-Guzik. [Self-Referencing Embedded Strings (SELFIES): A 100% robust molecular string representation](https://iopscience.iop.org/article/10.1088/2632-2153/aba947), *Machine Learning: Science and Technology* **1**(5) (2020): 045024.
+[2] Mario Krenn, Florian Häse, AkshatKumar Nigam, Pascal Friederich, and Alan Aspuru-Guzik. [Self-Referencing Embedded Strings (SELFIES): A 100% robust molecular string representation](https://iopscience.iop.org/article/10.1088/2632-2153/aba947), *Machine Learning: Science and Technology* **1**(5), 045024 (2020).
